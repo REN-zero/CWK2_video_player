@@ -21,3 +21,16 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+DISTFILES += \
+    icon/hand-thumbs-up-fill.svg \
+    icon/pause.svg \
+    icon/person-circle.svg \
+    icon/play.svg \
+    icon/share.svg \
+    icon/skip-end.svg \
+    icon/skip-forward.svg \
+    icon/skip-start.svg
+
+RESOURCES += \
+    icon.qrc
+

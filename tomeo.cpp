@@ -119,35 +119,95 @@ int main(int argc, char *argv[]) {
     QHBoxLayout *functionButton_layout = new QHBoxLayout();
     functionButton_layout->setMargin(0);
     function_buttonWidget->setLayout(functionButton_layout);
-    //create buttons
+    //播放键
     QPushButton *play = new QPushButton;
+    play->setFixedSize(40,40);
     play ->setIconSize(QSize(40, 40));
     play ->setIcon(play->style()->standardIcon(QStyle::SP_MediaPlay));
     play ->connect(play, &QPushButton::clicked, player, &QMediaPlayer::play);
-    play ->setStyleSheet("width: 5%; height:100%");
     function_buttons.push_back(play);
+    //时间轴
+    QWidget *timeline_row = new QWidget();
+    QHBoxLayout *timeline_row_layout = new QHBoxLayout();
+    timeline_row->setLayout(timeline_row_layout);
+    timeline_row_layout ->setMargin(0);
+    timeline_row_layout ->setSpacing(0);
+    QSlider *timelineScrollbar = new QSlider(Qt::Horizontal);
+    timelineScrollbar->setMaximumHeight(15);
+    timelineScrollbar->setObjectName("durationSlider");
+    timeline_row_layout->addWidget(timelineScrollbar);
+    //上一个
     QPushButton *skipBackward = new QPushButton;
+    skipBackward->setFixedSize(40,40);
     skipBackward ->setIconSize(QSize(40, 40));
     skipBackward ->setIcon(skipBackward->style()->standardIcon(QStyle::SP_MediaSkipBackward));
     skipBackward ->connect(skipBackward, &QPushButton::clicked, player, &QMediaPlayer::play);   
     function_buttons.push_back(skipBackward);
+    //下一个
     QPushButton *skipForward = new QPushButton;
+    skipForward->setFixedSize(40,40);
     skipForward->setIconSize(QSize(40, 40));
     skipForward->setIcon(skipForward->style()->standardIcon(QStyle::SP_MediaSkipForward));
     skipForward->connect(skipForward, &QPushButton::clicked, player, &QMediaPlayer::play);
     function_buttons.push_back(skipForward);
+    //音量键
     QPushButton *volume = new QPushButton;
+    volume ->setFixedSize(40,40);
     volume ->setIconSize(QSize(40, 40));
     volume ->setIcon(volume->style()->standardIcon(QStyle::SP_MediaVolume));
     volume ->connect(volume, &QPushButton::clicked, player, &QMediaPlayer::play);
     function_buttons.push_back(volume);
-
-    functionButton_layout->addWidget(play);
-    functionButton_layout->addWidget(skipBackward);
-    functionButton_layout->addWidget(skipForward);
-    functionButton_layout->addSpacing(500);
+    //音量轴
+     QSlider *volumelineScrollbar = new QSlider(Qt::Horizontal);
+     volumelineScrollbar->setMaximumHeight(15);
+     volumelineScrollbar->setObjectName("volumeSlider");
+     volumelineScrollbar->setRange(0, 100);
+     volumelineScrollbar->setMaximumWidth(150);
+     volumelineScrollbar->setObjectName("volumeSlider");
+     volumelineScrollbar->setValue(50);
+    //组件嵌入布局(3个功能按钮为一组)
+    QWidget *function_buttons_group1 = new QWidget();
+    QHBoxLayout *function_buttons_group1_layout = new QHBoxLayout();
+    function_buttons_group1_layout->setSpacing(10);
+    function_buttons_group1_layout->setMargin(0);
+    function_buttons_group1->setLayout(function_buttons_group1_layout);
+    function_buttons_group1_layout->addWidget(play);
+    function_buttons_group1_layout->addWidget(skipBackward);
+    function_buttons_group1_layout->addWidget(skipForward);
+    functionButton_layout->setSpacing(0);
+    functionButton_layout->addWidget(function_buttons_group1);
+    functionButton_layout->addStretch();
     functionButton_layout->addWidget(volume);
-    // create the four buttons
+    functionButton_layout->addWidget(volumelineScrollbar);
+
+
+    //播客信息行
+    QWidget *updater_row = new QWidget();
+    QHBoxLayout *updater_row_layout = new QHBoxLayout();
+    updater_row->setLayout(updater_row_layout);
+    updater_row_layout->setMargin(0);
+    updater_row_layout->setSpacing(0);
+    //头像
+    QPushButton *updater_photo = new QPushButton();
+    updater_photo ->setIconSize(QSize(40, 40));
+    updater_photo->setIcon(QIcon(":/icon/person-circle.svg"));
+    updater_photo->setFixedSize(80,80);
+    QPushButton *updater_name = new QPushButton;
+    updater_name->setText("Jhon Newo");
+    QPushButton *thumb = new QPushButton();
+    thumb->setIconSize(QSize(40,40));
+    thumb->setIcon(QIcon(":/icon/hand-thumbs-up-fill.svg"));
+    thumb->setFixedSize(40,40);
+    QPushButton *share = new QPushButton();
+    share->setIconSize(QSize(40,40));
+    share->setIcon(QIcon(":/icon/play.svg"));
+    share->setFixedSize(40,40);
+
+    updater_row_layout->addWidget(updater_photo);
+    updater_row_layout->addStretch();
+    updater_row_layout->addWidget(thumb);
+    updater_row_layout->addWidget(share);
+    //侧栏视频
     for ( int i = 0; i < 4; i++ ) {
         TheButton *button = new TheButton(buttonWidget);
         button->connect(button, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo*))); // when clicked, tell the player to play.
@@ -159,6 +219,8 @@ int main(int argc, char *argv[]) {
     // tell the player what buttons and videos are available
     player->setContent(&buttons, & videos);
     // create the main window and layout
+
+
     QWidget window;
     QWidget* leftSide = new QWidget();
     QWidget* rightSide = new QWidget();
@@ -180,7 +242,9 @@ int main(int argc, char *argv[]) {
 
     // add the video and the buttons to the top level widget
     left_layout ->addWidget(videoWidget);
+    left_layout ->addWidget(timeline_row);
     left_layout ->addWidget(function_buttonWidget);
+    left_layout ->addWidget(updater_row);
     right_layout->addWidget(buttonWidget);
     main->addWidget(leftSide);
     main->addWidget(rightSide);

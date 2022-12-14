@@ -1,2 +1,10 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/">
+        <file>icon/pause.svg</file>
+        <file>icon/play.svg</file>
+        <file>icon/skip-end.svg</file>
+        <file>icon/skip-forward.svg</file>
+        <file>icon/skip-start.svg</file>
+        <file>icon/person-circle.svg</file>
+    </qresource>
+</RCC>
